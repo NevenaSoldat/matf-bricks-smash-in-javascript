@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Matf JavaScript Course</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="1080" height="720"></canvas>
+
+<script>
+	var gameCanvas = document.getElementById("gameCanvas");
+    var gameContext = gameCanvas.getContext("2d");
+	
+	var xCoordinate = gameCanvas.width/2;
+    var yCoordinate = gameCanvas.height;
+	
+	var paddleX = gameCanvas.width/2;
+	var paddleWidth = 75;
+	
+	var rightArrowPressed = false;
+    var leftArrowPressed = false;
+	
+	document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+		
+	function keyDownHandler(e) {
+        if(e.keyCode == 39) {
+            rightArrowPressed = true;
+        }
+        else if(e.keyCode == 37) {
+            leftArrowPressed = true;
+        }
+		else
+		{
+			rightArrowPressed = false;
+			leftArrowPressed = false;
+		}		
+    }
+	
+    function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            rightArrowPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftArrowPressed = false;
+        }
+    }
+	
+	function drawPaddle()
+	{
+		gameContext.beginPath();
+        gameContext.rect(paddleX, gameCanvas.height-10, paddleWidth, 10);
+        gameContext.fillStyle = "blue";
+        gameContext.fill();
+        gameContext.closePath();
+	}
+	
+	function draw() {	
+		var xStep = 3;
+		var yStep = -3;
+		
+        gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        
+		drawPaddle();
+		
+		if(rightArrowPressed && paddleX < gameCanvas.width-paddleWidth) {
+            paddleX += xStep;
+        }
+        else if(leftArrowPressed && paddleX > 0) {
+            paddleX -= xStep;
+        }
+						
+        xCoordinate += xStep;
+        yCoordinate += yStep;
+		
+		window.requestAnimationFrame(draw);
+    }
+    
+    draw();
+</script>
+
+</body>
+</html>
