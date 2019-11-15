@@ -16,11 +16,12 @@
 	var gameCanvas = document.getElementById("gameCanvas");
     var gameContext = gameCanvas.getContext("2d");
 	
-	var xCoordinate = gameCanvas.width/2;
-    var yCoordinate = gameCanvas.height;
+	var x = gameCanvas.width/2;
+    var y = gameCanvas.height;
 	
-	var paddleX = gameCanvas.width/2;
+	var paddlePosition = gameCanvas.width/2;
 	var paddleWidth = 75;
+	var ballSize = 10;
 	
 	var rightArrowPressed = false;
     var leftArrowPressed = false;
@@ -54,29 +55,51 @@
 	function drawPaddle()
 	{
 		gameContext.beginPath();
-        gameContext.rect(paddleX, gameCanvas.height-10, paddleWidth, 10);
-        gameContext.fillStyle = "blue";
+        gameContext.rect(paddlePosition, gameCanvas.height-10, paddleWidth, 10);
+        gameContext.fillStyle = "black";
         gameContext.fill();
         gameContext.closePath();
 	}
 	
+	function drawBall() {
+        gameContext.beginPath();
+        gameContext.arc(x, y, ballSize, 0, Math.PI*2);
+        gameContext.fillStyle = "green";
+        gameContext.fill();
+        gameContext.closePath();
+    }
+	
+	var xBallStep = -5;
+	var yBallStep = -5;
+	var xPaddleStep = 4;
+	var yPaddleStep = 4;
 	function draw() {	
-		var xStep = 3;
-		var yStep = -3;
-		
-        gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+	    gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         
 		drawPaddle();
+		drawBall();
 		
-		if(rightArrowPressed && paddleX < gameCanvas.width-paddleWidth) {
-            paddleX += xStep;
+		if(rightArrowPressed && paddlePosition < gameCanvas.width-paddleWidth) {
+            paddlePosition += xPaddleStep;
         }
-        else if(leftArrowPressed && paddleX > 0) {
-            paddleX -= xStep;
+        else if(leftArrowPressed && paddlePosition > 0) {
+            paddlePosition -= yPaddleStep;
         }
+		
+		if(x + xBallStep > gameCanvas.width-ballSize || x + xBallStep < ballSize) {
+            xBallStep = -xBallStep;
+        }
+        if(y + yBallStep < ballSize) {
+            yBallStep = -yBallStep;
+        }
+		else if(y + yBallStep > gameCanvas.height-ballSize) {
+			if(x > paddlePosition && x < paddlePosition + paddleWidth) {
+                yBallStep = -yBallStep;
+            }		
+		}
 						
-        xCoordinate += xStep;
-        yCoordinate += yStep;
+        x += xBallStep;
+        y += yBallStep;
 		
 		window.requestAnimationFrame(draw);
     }
