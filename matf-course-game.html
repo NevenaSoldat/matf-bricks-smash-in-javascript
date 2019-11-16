@@ -22,6 +22,7 @@
 	var paddlePosition = gameCanvas.width/2;
 	var paddleWidth = 75;
 	var ballSize = 10;
+	var bricks = [];
 	
 	var rightArrowPressed = false;
     var leftArrowPressed = false;
@@ -44,40 +45,84 @@
     }
 	
     function keyUpHandler(e) {
-        if(e.keyCode == 39) {
+        if(e.keyCode == 37 || e.keyCode == 39) {
             rightArrowPressed = false;
-        }
-        else if(e.keyCode == 37) {
             leftArrowPressed = false;
-        }
+		}
     }
 	
-	function drawPaddle()
+	function drawPaddleAndBall()
 	{
 		gameContext.beginPath();
         gameContext.rect(paddlePosition, gameCanvas.height-10, paddleWidth, 10);
         gameContext.fillStyle = "black";
         gameContext.fill();
         gameContext.closePath();
-	}
-	
-	function drawBall() {
-        gameContext.beginPath();
+		
+		gameContext.beginPath();
         gameContext.arc(x, y, ballSize, 0, Math.PI*2);
         gameContext.fillStyle = "green";
         gameContext.fill();
         gameContext.closePath();
+	}
+	
+	var brickRows = 17;
+    var brickColumns = 10;
+    var brickWidth = 50;
+    var brickHeight = 20;
+    var brickPadding = 10;
+		
+    for(var i=0; i<brickColumns; i++) {
+        bricks[i] = [];
+        for(var j=0; j<brickRows; j++) {
+            bricks[i][j] = { x: 0, y: 0, status: 1 };
+        }
+    }
+	
+	function drawBricks() {
+        for(var i=0; i<brickColumns; i++) {
+            for(var j=0; j<brickRows; j++) {
+                if(bricks[i][j].status == 1) {
+                    var brickX = (j*(brickWidth+brickPadding) + 35);
+                    var brickY = (i*(brickHeight+brickPadding)) + 35;
+                    bricks[i][j].x = brickX;
+                    bricks[i][j].y = brickY;
+                    gameContext.beginPath();
+                    gameContext.rect(brickX, brickY, brickWidth, brickHeight);
+                    gameContext.fillStyle = "grey";
+                    gameContext.fill();
+                    gameContext.closePath();
+                }
+            }
+        }
+    }
+	
+	function updateBricksStatus() {
+        for(var i=0; i<brickColumns; i++) {
+            for(var j=0; j<brickRows; j++) {
+                var brick = bricks[i][j];
+                if(brick.status == 1) {
+                    if(x > brick.x && x < brick.x + brickWidth) {
+						if(y > brick.y && y < brick.y+brickHeight) {					
+							yBallStep = -yBallStep;
+							brick.status = 0;
+						}							
+                    }
+                }
+            }
+        }
     }
 	
 	var xBallStep = -5;
 	var yBallStep = -5;
-	var xPaddleStep = 4;
-	var yPaddleStep = 4;
+	var xPaddleStep = 6;
+	var yPaddleStep = 6;
 	function draw() {	
 	    gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         
-		drawPaddle();
-		drawBall();
+		drawPaddleAndBall();
+		drawBricks();
+		updateBricksStatus();
 		
 		if(rightArrowPressed && paddlePosition < gameCanvas.width-paddleWidth) {
             paddlePosition += xPaddleStep;
