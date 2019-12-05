@@ -53,10 +53,10 @@
     ball = new Ball(gameCanvas.width/2, gameCanvas.height, 10);
 		
 	function keyDownHandler(e) {
-        if(e.keyCode == 39) {
+        if(e.keyCode === 39) {
             rightArrowPressed = true;
         }
-        else if(e.keyCode == 37) {
+        else if(e.keyCode === 37) {
             leftArrowPressed = true;
         }
 		else
@@ -67,7 +67,7 @@
     }
 	
     function keyUpHandler(e) {
-        if(e.keyCode == 37 || e.keyCode == 39) {
+        if(e.keyCode === 37 || e.keyCode === 39) {
             rightArrowPressed = false;
             leftArrowPressed = false;
 		}
@@ -105,7 +105,7 @@
 	function drawBricks() {
         for(var i=0; i<brickColumns; i++) {
             for(var j=0; j<brickRows; j++) {
-                if(bricks[i][j].status == 1) {
+                if(bricks[i][j].status === 1) {
                     var brickX = (j*(brickWidth+brickPadding) + 35);
                     var brickY = (i*(brickHeight+brickPadding)) + 35;
                     bricks[i][j].x = brickX;
