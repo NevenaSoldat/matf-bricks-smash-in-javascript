@@ -40,7 +40,6 @@
 
 	var gameCanvas = document.getElementById("gameCanvas");
     var gameContext = gameCanvas.getContext("2d");
-		
 	
 	
 	var rightArrowPressed = false;
@@ -53,10 +52,10 @@
     ball = new Ball(gameCanvas.width/2, gameCanvas.height, 10);
 		
 	function keyDownHandler(e) {
-        if(e.keyCode === 39) {
+        if(e.keyCode == 39) {
             rightArrowPressed = true;
         }
-        else if(e.keyCode === 37) {
+        else if(e.keyCode == 37) {
             leftArrowPressed = true;
         }
 		else
@@ -67,7 +66,7 @@
     }
 	
     function keyUpHandler(e) {
-        if(e.keyCode === 37 || e.keyCode === 39) {
+        if(e.keyCode == 37 || e.keyCode == 39) {
             rightArrowPressed = false;
             leftArrowPressed = false;
 		}
@@ -105,7 +104,7 @@
 	function drawBricks() {
         for(var i=0; i<brickColumns; i++) {
             for(var j=0; j<brickRows; j++) {
-                if(bricks[i][j].status === 1) {
+                if(bricks[i][j].status == 1) {
                     var brickX = (j*(brickWidth+brickPadding) + 35);
                     var brickY = (i*(brickHeight+brickPadding)) + 35;
                     bricks[i][j].x = brickX;
@@ -134,6 +133,17 @@
                 }
             }
         }
+    }  
+        
+    function isGameFinished() {
+        for(var i=0; i<brickColumns; i++) {
+            for(var j=0; j<brickRows; j++) {
+                if(bricks[i][j].status == 1) {
+                    return;
+                }
+                window.alert("Congratulations! You won!");                
+            }
+        }
     }
 	
 	var xBallStep = -5;
@@ -144,6 +154,7 @@
 		drawPaddleAndBall();
 		drawBricks();
 		updateBricksStatus();
+        isGameFinished();
 		
 		if(rightArrowPressed && paddle.paddlePosition < gameCanvas.width-paddle.paddleWidth) {
             paddle.movePaddle = 6;
@@ -161,7 +172,10 @@
 		else if(ball.y+yBallStep > gameCanvas.height-ball.ballSize) {
 			if(ball.x > paddle.paddlePosition && ball.x < paddle.paddlePosition + paddle.paddleWidth) {
                 yBallStep = -yBallStep;
-            }		
+            } else if(ball.y - 20 > gameCanvas.height) {
+                window.alert("Game over!");  
+                exit();
+            }
 		}
 						
         ball.xchange = xBallStep;
