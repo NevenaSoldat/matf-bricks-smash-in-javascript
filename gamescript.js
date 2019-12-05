@@ -134,17 +134,32 @@
             }
         }
     }  
-        
-    function isGameFinished() {
-        for(var i=0; i<brickColumns; i++) {
-            for(var j=0; j<brickRows; j++) {
-                if(bricks[i][j].status == 1) {
-                    return;
+            
+    function AlertsModule(bricks, brickColumns, brickRows)
+    {
+        function gameFinished(bricks, brickColumns, brickRows) {
+            for(var i=0; i<brickColumns; i++) {
+                for(var j=0; j<brickRows; j++) {
+                    if(bricks[i][j].status == 1) {
+                        return;
+                    }
+                    window.alert("Congratulations! You won!");                
                 }
-                window.alert("Congratulations! You won!");                
             }
         }
+        
+        function gameOver() {
+            window.alert("Game over!");    
+        }
+        
+        return {
+            finished : gameFinished,
+            gameover : gameOver
+        };
     }
+    
+    var alerts = AlertsModule(bricks, brickColumns, brickRows); 
+    
 	
 	var xBallStep = -5;
 	var yBallStep = -5;
@@ -154,7 +169,7 @@
 		drawPaddleAndBall();
 		drawBricks();
 		updateBricksStatus();
-        isGameFinished();
+        alerts.finished(); 
 		
 		if(rightArrowPressed && paddle.paddlePosition < gameCanvas.width-paddle.paddleWidth) {
             paddle.movePaddle = 6;
@@ -173,7 +188,7 @@
 			if(ball.x > paddle.paddlePosition && ball.x < paddle.paddlePosition + paddle.paddleWidth) {
                 yBallStep = -yBallStep;
             } else if(ball.y - 20 > gameCanvas.height) {
-                window.alert("Game over!");  
+                alerts.gameover();
                 exit();
             }
 		}
