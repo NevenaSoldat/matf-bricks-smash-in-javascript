@@ -40,6 +40,13 @@
 
 	var gameCanvas = document.getElementById("gameCanvas");
     var gameContext = gameCanvas.getContext("2d");
+    var score = 0;
+    
+    function showScore() {
+        gameContext.font = "16px Arial";
+        gameContext.fillStyle = "#585858";
+        gameContext.fillText("Score: " + score, 980, 20);
+    }
 	
 	
 	var rightArrowPressed = false;
@@ -93,7 +100,7 @@
     var brickHeight = 20;
     var brickPadding = 10;
     var bricks = [];
-		
+
     for(var i=0; i<brickColumns; i++) {
         bricks[i] = [];
         for(var j=0; j<brickRows; j++) {
@@ -118,6 +125,7 @@
             }
         }
     }
+    
 	
 	function updateBricksStatus() {
         for(var i=0; i<brickColumns; i++) {
@@ -128,6 +136,7 @@
 						if(ball.y > brick.y && ball.y < brick.y+brickHeight) {					
 							yBallStep = -yBallStep;
 							brick.status = 0;
+                            score++;
 						}							
                     }
                 }
@@ -149,7 +158,8 @@
         }
         
         function gameOver() {
-            window.alert("Game over!");    
+            window.alert("Game over! Your score is: " + score);
+            
         }
         
         return {
@@ -163,40 +173,42 @@
 	
 	var xBallStep = -5;
 	var yBallStep = -5;
+    
 	function draw() {	
-	    gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+    gameContext.clearRect(0, 0, 1080, 720);
         
-		drawPaddleAndBall();
-		drawBricks();
-		updateBricksStatus();
-        alerts.finished(); 
+    drawPaddleAndBall();
+    drawBricks();
+    updateBricksStatus();
+    alerts.finished(); 
+    showScore();
 		
-		if(rightArrowPressed && paddle.paddlePosition < gameCanvas.width-paddle.paddleWidth) {
-            paddle.movePaddle = 6;
-        }
-        else if(leftArrowPressed && paddle.paddlePosition > 0) {
-            paddle.movePaddle = -6;
-        }
+    if(rightArrowPressed && paddle.paddlePosition < gameCanvas.width-paddle.paddleWidth) {
+        paddle.movePaddle = 6;
+    }
+    else if(leftArrowPressed && paddle.paddlePosition > 0) {
+        paddle.movePaddle = -6;
+    }
 		
-		if(ball.x + xBallStep > gameCanvas.width- ball.ballSize || ball.x+xBallStep < ball.ballSize) {
-            xBallStep = -xBallStep;
-        }
-        if(ball.y + yBallStep < ball.ballSize) {
+    if(ball.x + xBallStep > gameCanvas.width- ball.ballSize || ball.x+xBallStep < ball.ballSize) {
+        xBallStep = -xBallStep;
+    }
+    if(ball.y + yBallStep < ball.ballSize) {
+        yBallStep = -yBallStep;
+    }
+    else if(ball.y+yBallStep > gameCanvas.height-ball.ballSize) {
+        if(ball.x > paddle.paddlePosition && ball.x < paddle.paddlePosition + paddle.paddleWidth) {
             yBallStep = -yBallStep;
+        } else if(ball.y - 20 > gameCanvas.height) {
+            alerts.gameover();
+            exit();
         }
-		else if(ball.y+yBallStep > gameCanvas.height-ball.ballSize) {
-			if(ball.x > paddle.paddlePosition && ball.x < paddle.paddlePosition + paddle.paddleWidth) {
-                yBallStep = -yBallStep;
-            } else if(ball.y - 20 > gameCanvas.height) {
-                alerts.gameover();
-                exit();
-            }
-		}
+    }
 						
-        ball.xchange = xBallStep;
-        ball.ychange = yBallStep;
+    ball.xchange = xBallStep;
+    ball.ychange = yBallStep;
 		
-		window.requestAnimationFrame(draw);
+    window.requestAnimationFrame(draw);
     }
     
     draw();
