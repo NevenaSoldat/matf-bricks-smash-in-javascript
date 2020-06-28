@@ -1,2 +1,2 @@
 # matf-kurs-javascript
-Repository for JavaScript course
+Repository for Bricks Smash game.
