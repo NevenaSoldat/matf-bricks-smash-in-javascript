@@ -1,0 +1,41 @@
+body {
+    background-color: RosyBrown;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#header {
+    color: PapayaWhip;
+    text-align: center;
+}
+.mainWrapper {
+    margin: auto;
+    margin-top: 50px;
+    width: 60%;
+}
+
+.board {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .board td, .board th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .board tr:nth-child(even){background-color: papayawhip;}
+  .board tr:nth-child(odd){background-color: peachpuff;}
+  
+  .board tr:hover {background-color: rgb(212, 82, 6);}
+  
+  .board th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: brown;
+    color: white;
+    text-align: center;
+  }
+  
+  
