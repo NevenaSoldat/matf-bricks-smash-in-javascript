@@ -20,12 +20,10 @@ class LeaderBoard extends React.Component {
   render() {
     console.log(this.state);
 
-    let rank = 1;
     let content = this.state.results.map(
       value => 
       
         <tr className="row">
-          <td className="cell">{rank++}.</td>
           <td className="cell">{value.name}</td>
           <td className="cell">{value.score}</td>
           <td className="cell">{
@@ -36,15 +34,14 @@ class LeaderBoard extends React.Component {
 
     return (
       <div className="mainWrapper">
-        <h2 id="header"> Memory Game Leaderboard </h2>
+        <h2 id="header"> Bricks Smash Game Leaderboard </h2>
         
         <table className="board">
           
           <thead>
             <tr class="header">
-              <th>POSITION</th>
               <th>USERNAME</th>
-              <th>SCORE (num of clicks)</th>
+              <th>SCORE (num of smashed bricks)</th>
               <th>TIME</th>
             </tr>
             </thead>
